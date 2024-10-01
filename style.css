@@ -1,0 +1,120 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #010101;
+}
+
+main {
+    display: grid;
+    grid-template-areas: "area1 area2";
+    grid-template-columns: 50% 50%;
+}
+
+.image-container {
+    grid-area: "area1";
+    height: 100vh;
+    background-image: url(images/side-image.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.form-container {
+    grid-area: "area2";
+}
+
+.change-form-login,
+.change-form-register {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+
+.change-form-login p,
+.change-form-register p {
+    font-weight: 600;
+    color: white;
+}
+
+.change-form-login button,
+.change-form-register button {
+    width: 100px;
+    height: 40px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #FD0965;
+    color: white;
+    font-weight: 600;
+}
+
+/* #TODO: migliorare transizione e aggiungere transition pulsanti */
+
+.register-form, 
+.login-form {
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, visibility 0s 0.5s, max-height 0.5s ease;
+}
+
+.register-form.active, 
+.login-form.active {
+    padding: 40px;
+    opacity: 1;
+    visibility: visible;
+    max-height: 900px; 
+    transition: opacity 0.5s ease, visibility 0s 0s, max-height 0.5s ease;
+}
+
+.register-form h1,
+.login-form h1 {
+    margin: 0;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+form span {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: white;
+}
+
+form input:not([type="submit"]) {
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none;
+    margin-bottom: 30px;
+    padding: 5px 0;
+    width: 400px;
+    height: 20px;
+    background-color: #010101;
+    color: white;
+}
+
+form input[type="submit"] {
+    margin-top: 30px;
+    height: 50px;
+    width: 180px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: #FD0965;
+}
