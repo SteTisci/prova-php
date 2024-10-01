@@ -53,6 +53,12 @@ main {
     background-color: #FD0965;
     color: white;
     font-weight: 600;
+    transition: background-color 0.2s ease-in;
+}
+
+.change-form-login button:hover,
+.change-form-register button:hover {
+    background-color: #fd093e;
 }
 
 .register-form, 
@@ -66,7 +72,7 @@ main {
 
 .register-form.active,
 .login-form.active {
-    padding: 100px 80px;
+    padding: 180px 80px;
     visibility: visible;
     opacity: 1;
 }
@@ -117,4 +123,12 @@ form input[type="submit"] {
     font-weight: 600;
     color: white;
     background-color: #FD0965;
-}    
+    transition: width 0.2s ease, height 0.2s ease, translate 0.2s ease, background-color 0.2s ease;
+}  
+
+form input[type="submit"]:hover {
+    height: 52px;
+    width: 182px;
+    translate: -4px -4px;
+    background-color: #fd093e;
+}
