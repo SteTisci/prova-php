@@ -7,20 +7,14 @@ body {
 
 main {
     display: grid;
-    grid-template-areas: "area1 area2";
     grid-template-columns: 50% 50%;
 }
 
 .image-container {
-    grid-area: "area1";
     height: 100vh;
     background-image: url(images/side-image.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-}
-
-.form-container {
-    grid-area: "area2";
 }
 
 .change-form-login,
@@ -29,8 +23,18 @@ main {
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    width: 100%;
     gap: 15px;
+    visibility: hidden;
+    opacity: 0;
+    max-height: 0;
+    transition: opacity 1s ease;
+}
+
+.change-form-login.active,
+.change-form-register.active {
+    visibility: visible;
+    opacity: 1;
+    max-height: 200px;
 }
 
 .change-form-login p,
@@ -43,7 +47,7 @@ main {
 .change-form-register button {
     width: 100px;
     height: 40px;
-    margin-right: 10px;
+    margin-right: 3px;
     border: none;
     border-radius: 10px;
     background-color: #FD0965;
@@ -51,30 +55,26 @@ main {
     font-weight: 600;
 }
 
-/* #TODO: migliorare transizione e aggiungere transition pulsanti */
-
 .register-form, 
 .login-form {
-    opacity: 0;
+    padding: 0 80px;
     visibility: hidden;
+    opacity: 0;
     max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.5s ease, visibility 0s 0.5s, max-height 0.5s ease;
+    transition: opacity 0.5s ease, padding 0.5s ease;
 }
 
-.register-form.active, 
+.register-form.active,
 .login-form.active {
-    padding: 40px;
-    opacity: 1;
+    padding: 100px 80px;
     visibility: visible;
-    max-height: 900px; 
-    transition: opacity 0.5s ease, visibility 0s 0s, max-height 0.5s ease;
+    opacity: 1;
 }
 
 .register-form h1,
 .login-form h1 {
     margin: 0;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     font-size: 2rem;
     font-weight: 600;
     color: white;
@@ -99,7 +99,7 @@ form input:not([type="submit"]) {
     border-bottom: 1px solid white;
     outline: none;
     margin-bottom: 30px;
-    padding: 5px 0;
+    padding: 8px 0;
     width: 400px;
     height: 20px;
     background-color: #010101;
@@ -117,4 +117,4 @@ form input[type="submit"] {
     font-weight: 600;
     color: white;
     background-color: #FD0965;
-}
+}    

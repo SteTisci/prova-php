@@ -7,16 +7,16 @@ const changeRegister = document.querySelector(".change-form-register");
 
 loginBtn.addEventListener("click", () => {
   registerForm.classList.remove("active");
-  changeRegister.classList.remove("active");
+  changeLogin.classList.remove("active");
 
   loginForm.classList.add("active");
-  changeLogin.classList.add("active");
+  changeRegister.classList.add("active");
 });
 
 registerBtn.addEventListener("click", () => {
   loginForm.classList.remove("active");
-  changeLogin.classList.remove("active");
+  changeRegister.classList.remove("active");
 
   registerForm.classList.add("active");
-  changeRegister.classList.add("active");
+  changeLogin.classList.add("active");
 });
