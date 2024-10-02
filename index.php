@@ -13,6 +13,7 @@
   $nameErr = $passwordErr = $emailErr = $phoneErr = "";
   $name = $password = $email = $phone = "";
 
+  // Function to test the validity of the data inserted in the input fields. removes spaces, lashes and special characters from the data.
   function test_input($data)
   {
     $data = trim($data);
@@ -21,6 +22,7 @@
     return $data;
   }
 
+  // Form validation, check which form is submitted and show the corresponding error messages if present.
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['form_type']) && $_POST['form_type'] == 'register') {
@@ -62,6 +64,12 @@
       } else {
         $password = test_input($_POST["password"]);
       }
+
+    }
+    // if all input fields are correct the server redirects to the welcome page.
+    if (empty($nameErr) && empty($passwordErr) && empty($emailErr) && empty($phoneErr)) {
+      header("Location: welcome.php");
+      exit();
     }
   }
   ?>
@@ -72,15 +80,19 @@
   <main>
     <div class="image-container"></div>
     <div class="container">
-      <div class="change-form-login active">
+      <!-- when the submit button is clicked and an input field is wrong, reload the page with the current form submitted and the error messages. -->
+      <div
+        class="change-form-login <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'register' ? 'active' : ''; ?>">
         <p>Already have an account?</p>
         <button class="login">Login</button>
       </div>
-      <div class="change-form-register">
+      <div
+        class="change-form-register <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'login' ? 'active' : ''; ?>">
         <p>Don't have an account?</p>
         <button class="register">Register</button>
       </div>
-      <section class="register-form active">
+      <section
+        class="register-form <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'register' ? 'active' : ''; ?>">
         <h1>Create an account</h1>
         <div class="form-container">
           <form action="index.php" method="post">
@@ -89,27 +101,28 @@
               <span>Name</span>
               <span class="error">* <?php echo $nameErr ?></span>
             </div>
-            <input type="text" name="name" placeholder="Full Name..." />
+            <input type="text" name="name" placeholder="Full Name..." autocomplete="off" />
             <div class="info">
               <span>Password</span>
               <span class="error">* <?php echo $passwordErr ?></span>
             </div>
-            <input type="password" name="password" placeholder="************" />
+            <input type="password" name="password" placeholder="************" autocomplete="off" />
             <div class="info">
               <span>Email</span>
               <span class="error">* <?php echo $emailErr ?></span>
             </div>
-            <input type="email" name="email" placeholder="Email Address..." />
+            <input type="email" name="email" placeholder="Email Address..." autocomplete="off" />
             <div class="info">
               <span>Phone number</span>
               <span class="error">* <?php echo $phoneErr ?></span>
             </div>
-            <input type="tel" name="phone" placeholder="Phone Number..." />
+            <input type="tel" name="phone" placeholder="Phone Number..." autocomplete="off" />
             <input type="submit" value="Create account" />
           </form>
         </div>
       </section>
-      <section class="login-form">
+      <section
+        class="login-form <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'login' ? 'active' : ''; ?>">
         <div class="form-container">
           <h1>Login</h1>
           <form action="index.php" method="post">
@@ -118,12 +131,12 @@
               <span>Email</span>
               <span class="error">* <?php echo $emailErr ?></span>
             </div>
-            <input type="email" name="email" placeholder="Email Address..." />
+            <input type="email" name="email" placeholder="Email Address..." autocomplete="off" />
             <div class="info">
               <span>Password</span>
               <span class="error">* <?php echo $passwordErr ?></span>
             </div>
-            <input type="password" name="password" placeholder="************" />
+            <input type="password" name="password" placeholder="************" autocomplete="off" />
             <input type="submit" value="Login" />
           </form>
         </div>
@@ -131,7 +144,5 @@
     </div>
   </main>
 </body>
-
-<!-- TODO: gestire reinvio modulo per visualizzare la pagina attualmente attiva -->
 
 </html>
