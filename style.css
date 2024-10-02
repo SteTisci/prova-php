@@ -72,7 +72,7 @@ main {
 
 .register-form.active,
 .login-form.active {
-    padding: 50px 80px;
+    padding: 180px 80px;
     visibility: visible;
     opacity: 1;
 }
