@@ -143,4 +143,9 @@ form input[type="submit"]:hover {
     translate: -4px -4px;
 }
 
-/* #TODO: php page style, media query */
+@media only screen and (max-width: 1300px) {
+    .register-form.active,
+    .login-form.active {
+        padding: 50px 80px;
+    }
+}
