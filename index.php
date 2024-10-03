@@ -114,12 +114,12 @@
       <div
         class="change-form-login <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'register' ? 'active' : ''; ?>">
         <p>Already have an account?</p>
-        <button class="login">Login</button>
+        <button class="login">Sign in</button>
       </div>
       <div
         class="change-form-register <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'login' ? 'active' : ''; ?>">
         <p>Don't have an account?</p>
-        <button class="register">Register</button>
+        <button class="register">Sign up</button>
       </div>
       <section
         class="register-form <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'register' ? 'active' : ''; ?>">
