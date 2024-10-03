@@ -54,6 +54,7 @@ main {
   color: white;
   font-weight: 600;
   transition: background-color 0.2s ease-in;
+  cursor: pointer;
 }
 
 .change-form-login button:hover,
@@ -135,6 +136,7 @@ form input[type="submit"] {
   color: white;
   background-color: #fd0965;
   transition: width 0.1s ease, height 0.1s ease, translate 0.1s ease;
+  cursor: pointer;
 }
 
 form input[type="submit"]:hover {
