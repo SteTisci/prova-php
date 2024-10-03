@@ -78,9 +78,9 @@
     } elseif (isset($_POST['form_type']) && $_POST['form_type'] == 'login') {
 
       if (empty($_POST["name"])) {
-        $emailErr = "Name is required";
+        $nameErr = "Name is required";
       } else {
-        $email = test_input($_POST["name"]);
+        $name = test_input($_POST["name"]);
       }
 
       if (empty($_POST["password"])) {
@@ -91,8 +91,8 @@
       }
 
       // Redirect to the homepage after the login
-      if (empty($emailErr) && empty($passwordErr)) {
-        $_SESSION["email"] = $email;
+      if (empty($nameErr) && empty($passwordErr)) {
+        $_SESSION["name"] = $name;
         $_SESSION["password"] = $password;
 
         header("Location: homepage.php");
