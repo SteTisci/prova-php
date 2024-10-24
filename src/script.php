@@ -1,4 +1,14 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
+
+Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../')->load();
+
+$SERVER_NAME = getenv('SERVER_NAME');
+$USERNAME = getenv('NAME');
+$PASSWORD = getenv('PSWD');
+$DB_NAME = getenv('DB_NAME');
+
+
 $nameErr = $passwordErr = $emailErr = $phoneErr = "";
 $name = $password = $email = $phone = "";
 
@@ -55,10 +65,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // if all input fields are correct the server redirects to the welcome page.
         if (empty($nameErr) && empty($passwordErr) && empty($emailErr) && empty($phoneErr)) {
-            $_SESSION["name"] = $name;
-            $_SESSION["email"] = $email;
-            $_SESSION["phone"] = $phone;
-            $_SESSION["password"] = $password;
+
+            $_SESSION['name'] = $name;
+            $_SESSION['email'] = $email;
+            $_SESSION['phone'] = $phone;
+            $_SESSION['password'] = password_hash($password, PASSWORD_DEFAULT);
+
+            // Create database connection
+            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
+
+            if ($conn->connect_error) {
+                die("Connessione fallita: " . $conn->connect_error);
+            }
+
+            $sql = 'INSERT INTO Utenti(username, password, email, telefono) VALUES (?, ?, ?, ?)';
+
+            if ($stmt = $conn->prepare($sql)) {
+                // Crypt the password before inserting it in the database
+                $password = password_hash($password, PASSWORD_DEFAULT);
+
+                $stmt->bind_param('ssss', $name, $password, $email, $phone);
+                $stmt->execute();
+            } else {
+                echo "Errore durante l'inserimento dei dati" . $conn->error;
+            }
+            $conn->close();
 
             header("Location: welcome.php");
             exit();
@@ -81,8 +112,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Redirect to the homepage after the login
         if (empty($nameErr) && empty($passwordErr)) {
+
+            // TODO: aggiungere controllo dati prima di reinderizzare
             $_SESSION["name"] = $name;
-            $_SESSION["password"] = $password;
+            $_SESSION['password'] = password_hash($password, PASSWORD_DEFAULT);
 
             header("Location: homepage.php");
             exit();
