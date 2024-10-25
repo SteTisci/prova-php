@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeLogin = document.querySelector(".change-form-login");
   const changeRegister = document.querySelector(".change-form-register");
   const errorMessages = document.querySelectorAll(".error");
+  const loginErrorMessage = document.querySelector(".login-error");
 
   /* 
     This script manages the form currenty active, check which form was active before reloading the page and show it,
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     changeRegister.classList.add("active");
     // When the form is changed, clears the error messages
     clearErrorMessage(errorMessages);
+    loginErrorMessage.textContent = "";
   });
 
   registerBtn.addEventListener("click", () => {
