@@ -49,16 +49,15 @@
                 class="login-form <?php echo isset($_POST['form_type']) && $_POST['form_type'] == 'login' ? 'active' : ''; ?>">
                 <div class="form-container">
                     <h1>Login</h1>
+                    <p class="login-error"><?php echo $loginErr ?></p>
                     <form action="index.php" method="post" novalidate>
                         <input type="hidden" name="form_type" value="login" />
                         <div class="info">
                             <span>Name</span>
-                            <span class="error">* <?php echo $nameErr ?></span>
                         </div>
                         <input type="text" name="name" placeholder="Full name..." autocomplete="off" />
                         <div class="info">
                             <span>Password</span>
-                            <span class="error">* <?php echo $passwordErr ?></span>
                         </div>
                         <input type="password" name="password" placeholder="************" autocomplete="off" />
                         <input type="submit" value="Login" />
