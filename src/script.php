@@ -1,15 +1,16 @@
 <?php
+// I use dotenv for the enviroment variables of the database
 require __DIR__ . '/../vendor/autoload.php';
 
 Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../')->load();
 
 $SERVER_NAME = getenv('SERVER_NAME');
-$USERNAME = getenv('NAME');
-$PASSWORD = getenv('PSWD');
+$DB_USERNAME = getenv('DB_USERNAME');
+$DB_PASSWORD = getenv('DB_PASSWORD');
 $DB_NAME = getenv('DB_NAME');
 
 
-$nameErr = $passwordErr = $emailErr = $phoneErr = "";
+$nameErr = $passwordErr = $emailErr = $phoneErr = $loginErr = "";
 $name = $password = $email = $phone = "";
 
 // Function to test the validity of the data inserted in the input fields. 
@@ -24,6 +25,12 @@ function test_input($data)
 
 // Form validation, check which form is submitted, if the input is not empty and the correct format.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $conn = new mysqli($SERVER_NAME, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
+
+    if ($conn->connect_error) {
+        die("Connessione fallita: " . $conn->connect_error);
+    }
 
     if (isset($_POST['form_type']) && $_POST['form_type'] == 'register') {
 
@@ -65,62 +72,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // if all input fields are correct the server redirects to the welcome page.
         if (empty($nameErr) && empty($passwordErr) && empty($emailErr) && empty($phoneErr)) {
-
+            // Crypt the password
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['phone'] = $phone;
-            $_SESSION['password'] = password_hash($password, PASSWORD_DEFAULT);
+            $_SESSION['password'] = $passwordHash;
 
-            // Create database connection
-            $conn = new mysqli($SERVER_NAME, $USERNAME, $PASSWORD, $DB_NAME);
-
-            if ($conn->connect_error) {
-                die("Connessione fallita: " . $conn->connect_error);
-            }
-
+            // Insert the data from the register form in the database
             $sql = 'INSERT INTO Utenti(username, password, email, telefono) VALUES (?, ?, ?, ?)';
 
             if ($stmt = $conn->prepare($sql)) {
-                // Crypt the password before inserting it in the database
-                $password = password_hash($password, PASSWORD_DEFAULT);
-
-                $stmt->bind_param('ssss', $name, $password, $email, $phone);
+                $stmt->bind_param('ssss', $name, $passwordHash, $email, $phone);
                 $stmt->execute();
             } else {
-                echo "Errore durante l'inserimento dei dati" . $conn->error;
+                echo "Errore durante l'inserimento dei dati: " . $conn->error;
             }
-            $conn->close();
+            $stmt->close();
 
             header("Location: welcome.php");
             exit();
         }
 
     } elseif (isset($_POST['form_type']) && $_POST['form_type'] == 'login') {
+        // Retrive username and password from the data in the database
+        $sql = "SELECT username, password FROM Utenti WHERE username = ?";
 
-        if (empty($_POST["name"])) {
-            $nameErr = "Name is required";
-        } else {
-            $name = test_input($_POST["name"]);
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param('s', $_POST['name']);
+            $stmt->execute();
+            $stmt->bind_result($db_username, $db_password);
+
+            // if a row is present in the batabase and the password match the ashed one, the script redirect to the welcome page
+            if ($stmt->fetch() && password_verify($_POST['password'], $db_password)) {
+                $_SESSION['name'] = $db_username;
+
+                header("Location: homepage.php");
+                exit();
+            } else {
+                $loginErr = "* Username or Password doesn't match any account";
+            }
+            $stmt->close();
         }
-
-        if (empty($_POST["password"])) {
-            $passwordErr = "Password is required";
-        } else {
-            // If i use post for the password, chrome will show a security warning
-            $password = test_input($password);
-        }
-
-        // Redirect to the homepage after the login
-        if (empty($nameErr) && empty($passwordErr)) {
-
-            // TODO: aggiungere controllo dati prima di reinderizzare
-            $_SESSION["name"] = $name;
-            $_SESSION['password'] = password_hash($password, PASSWORD_DEFAULT);
-
-            header("Location: homepage.php");
-            exit();
-        }
-
     }
-
+    $conn->close();
 }
