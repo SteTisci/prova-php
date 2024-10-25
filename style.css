@@ -78,10 +78,23 @@ main {
   opacity: 1;
 }
 
-.register-form h1,
-.login-form h1 {
+.login-error {
+  color: #fd0965;
+  padding: 25px 0;
+  margin: 0;
+  height: fit-content;
+}
+
+.register-form h1{
   margin: 0;
   margin-bottom: 50px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.login-form h1 {
+  margin: 0;
   font-size: 2rem;
   font-weight: 600;
   color: white;
