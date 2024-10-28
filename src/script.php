@@ -23,11 +23,24 @@ function test_input($data)
     return $data;
 }
 
+function insertIntoDB($conn, ...$data)
+{
+    $sql = 'INSERT INTO Utenti(username, password, email, telefono) VALUES (?, ?, ?, ?)';
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param('ssss', ...$data);
+        $stmt->execute();
+    } else {
+        echo "Errore durante l'inserimento dei dati: " . $conn->error;
+    }
+    $stmt->close();
+}
+
 // Form validation, check which form is submitted, if the input is not empty and the correct format.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Open a database connection
     $conn = new mysqli($SERVER_NAME, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-
     if ($conn->connect_error) {
         die("Connessione fallita: " . $conn->connect_error);
     }
@@ -80,15 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['password'] = $passwordHash;
 
             // Insert the data from the register form in the database
-            $sql = 'INSERT INTO Utenti(username, password, email, telefono) VALUES (?, ?, ?, ?)';
-
-            if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param('ssss', $name, $passwordHash, $email, $phone);
-                $stmt->execute();
-            } else {
-                echo "Errore durante l'inserimento dei dati: " . $conn->error;
-            }
-            $stmt->close();
+            insertIntoDB($conn, $name, $passwordHash, $email, $phone);
 
             header("Location: welcome.php");
             exit();
